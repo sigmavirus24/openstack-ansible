@@ -38,7 +38,7 @@ test_list_name=${1:-commit_multinode}
 
 gen_test_list_commit_multinode(){
   # filter test list to produce list of tests to use.
-  egrep 'tempest\.api\.(identity|image|volume)'\
+  egrep 'tempest\.api\.(identity|image|volume|orchestration|compute|network|object_storage)'\
     |grep -vi xml \
     |grep -v compute \
     |grep -v VolumesV.ActionsTest
