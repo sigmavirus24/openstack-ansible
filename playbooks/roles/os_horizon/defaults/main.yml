@@ -38,6 +38,7 @@ horizon_galera_user: dash
 
 ## Horizon Help URL Path
 horizon_help_url: http://docs.openstack.org
+horizon_disable_password_reveal: False
 
 ## Installation directories
 horizon_lib_dir: /usr/local/lib/python2.7/dist-packages
@@ -48,7 +49,9 @@ horizon_server_name: "horizon"
 horizon_log_level: info
 horizon_self_signed: true
 horizon_self_signed_regen: false
+horizon_dropdown_max_items: 30
 horizon_time_zone: UTC
+horizon_enforce_password_check: False
 
 ## Horizon SSL
 ### Set the cacert pem if you'd like horizon to verify it.

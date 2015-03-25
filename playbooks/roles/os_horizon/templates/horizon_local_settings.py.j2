@@ -1,6 +1,5 @@
 import os
 from django.utils.translation import ugettext_lazy as _
-from openstack_dashboard import exceptions
 
 DEBUG = {{ debug }}
 TEMPLATE_DEBUG = DEBUG
@@ -47,7 +46,7 @@ SESSION_COOKIE_SECURE = True
 # OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'Default'
 
 # Set Console type:
-# valid options would be "AUTO"(default), "VNC", "SPICE", "RDP" or None
+# valid options would be "AUTO"(default), "VNC", "SPICE", "RDP", "SERIAL" or None
 # Set to None explicitly if you want to deactivate the console.
 # CONSOLE_TYPE = "AUTO"
 
@@ -63,9 +62,6 @@ HORIZON_CONFIG = {
         'types': ['alert-success', 'alert-info']
     },
     'help_url': "{{ horizon_help_url|default('http://docs.openstack.org') }}",
-    'exceptions': {'recoverable': exceptions.RECOVERABLE,
-                   'not_found': exceptions.NOT_FOUND,
-                   'unauthorized': exceptions.UNAUTHORIZED},
     'angular_modules': [],
     'js_files': [],
 }
@@ -83,6 +79,10 @@ HORIZON_CONFIG = {
 # Turn off browser autocompletion for forms including the login form and
 # the database creation workflow if so desired.
 # HORIZON_CONFIG["password_autocomplete"] = "off"
+
+# Setting this to True will disable the reveal button for password fields,
+# including on the login form.
+HORIZON_CONFIG["disable_password_reveal"] = {{ horizon_disable_password_reveal }}
 
 LOCAL_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -267,6 +267,9 @@ OPENSTACK_ENDPOINT_TYPE = '{{ horizon_endpoint_type }}'
 API_RESULT_LIMIT = 1000
 API_RESULT_PAGE_SIZE = 20
 
+# Specify a maximum number of items to display in a dropdown.
+DROPDOWN_MAX_ITEMS = {{ horizon_dropdown_max_items }}
+
 # The timezone of the server. This should correspond with the timezone
 # of your entire OpenStack installation, and hopefully be in UTC.
 TIME_ZONE = "{{ horizon_time_zone }}"
@@ -283,6 +286,18 @@ TIME_ZONE = "{{ horizon_time_zone }}"
 #     'key': my_awesome_callback_method,
 #     'reverse': False,
 # }
+
+# Set this to True to display an 'Admin Password' field on the Change Password
+# form to verify that it is indeed the admin logged-in who wants to change
+# the password.
+ENFORCE_PASSWORD_CHECK = {{ horizon_enforce_password_check }}
+
+# Modules that provide /auth routes that can be used to handle different types
+# of user authentication. Add auth plugins that require extra route handling to
+# this list.
+#AUTHENTICATION_URLS = [
+#    'openstack_auth.urls',
+#]
 
 # The Horizon Policy Enforcement engine uses these values to load per service
 # policy rule files. The content of these files should match the files the
