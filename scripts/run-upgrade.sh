@@ -64,9 +64,10 @@ function run_lock() {
 
   if [ ! -f "$upgrade_marker" ];then
     openstack-ansible "$2"
+    playbook_status="$?"
     echo "ran $run_item"
 
-    if [ "$?" == "0" ];then
+    if [ "$playbook_status" == "0" ];then
       RUN_TASKS=("${RUN_TASKS[@]/$run_item}")
       touch "$upgrade_marker"
       echo "$run_item has been marked as success"
