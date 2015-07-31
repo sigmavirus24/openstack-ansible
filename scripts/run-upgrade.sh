@@ -59,11 +59,24 @@ function remove_inv_items(){
 function run_lock() {
   set +e
   run_item="${RUN_TASKS[$1]}"
-  upgrade_marker_file=$(basename $run_item .yml)
+  file_part="${run_item}"
+
+  # NOTE(sigmavirus24): This handles tasks like:
+  # -e 'rabbitmq_upgrade=true' setup-infrastructure.yml
+  # /tmp/fix_container_interfaces.yml || true
+  # So we can get the appropriate basename for the upgrade_marker
+  for part in $run_item; do
+    if [[ "$part" == *.yml ]];then
+      file_part="$part"
+      break
+    fi
+  done
+
+  upgrade_marker_file=$(basename ${file_part} .yml)
   upgrade_marker="/etc/openstack_deploy/upgrade-juno/$upgrade_marker_file.complete"
 
   if [ ! -f "$upgrade_marker" ];then
-    openstack-ansible "$2"
+    eval "openstack-ansible $2"
     playbook_status="$?"
     echo "ran $run_item"
 
@@ -651,6 +664,6 @@ pushd playbooks
 
   # Run the tasks in order
   for item in ${!RUN_TASKS[@]}; do
-    run_lock $item ${RUN_TASKS[$item]}
+    run_lock $item "${RUN_TASKS[$item]}"
   done
 popd
