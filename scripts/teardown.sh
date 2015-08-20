@@ -241,6 +241,8 @@ popd
 # Remove the temp destruction play
 rm /tmp/destroy_play.yml &>/dev/null || true
 rm /tmp/localhost &>/dev/null || true
+# Remove containers from /etc/hosts
+sed -i '/aio1_/d' /etc/hosts
 
 # Final message
 get_instance_info
