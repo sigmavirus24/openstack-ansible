@@ -63,6 +63,7 @@ lxc_container_interface: |
   iface {{ item.value.interface }} inet static
       address {{ item.value.address }}
       netmask {{ item.value.netmask }}
+      post-up ip link set $IFACE address $(cat /sys/class/net/$IFACE/address)
   {% if item.value.gateway is defined %}
       gateway {{ item.value.gateway }}
   {% endif %}

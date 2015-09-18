@@ -30,7 +30,18 @@
         delay: 1
       tags:
         - lxc-container-wait-for-ssh
+    - name: Add kernel tuning to containers
+      sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        sysctl_set: "{{ item.set|default('yes') }}"
+        state: "{{ item.state|default('present') }}"
+        reload: "{{ item.reload|default('yes') }}"
+      ignore_errors: true
+      with_items: lxc_container_kernel_options
   vars:
     ansible_hostname: "{{ container_name }}"
     is_metal: "{{ properties.is_metal|default(false) }}"
     lxc_container_release: "{{ properties.container_release|default('trusty') }}"
+    lxc_container_kernel_options:
+      - { key: 'net.ipv4.conf.all.arp_notify', value: 1 }
